@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Signature Box</title>
+  <style>
+    #canvas {
+      border: 1px solid #ccc;
+     background:white;
+    }
+    .body{
+    }
+    
+  </style>
+</head>
+<body bgcolor="">
+<form align="center" id="form">
+    FirstName:<input type="text" placeholder="FirstName" id="first"/><br><br>
+     LastName:<input type="text" placeholder="LastName" id="last"/><br><br>
+     DOB:<input type="date" placeholder="mm/dd/yy" id="date"/><br><br>
+     Address:<textarea placeholder="address" rows="5" id="add"></textarea>
+    
+</form>
+
+
+ <div align="center">
+ 
+  
+
+
+  
+  <p>Please sign below:</p>
+  <canvas id="canvas" width="200" height="100"></canvas>
+  <br>
+  <button onclick="clearCanvas()">Clear</button>
+  <br>
+  <button onclick="saveCanvas()">Save</button>
+  <br>
+  <div id="signature-container"></div><br>
+  <button type="button"  onclick="submit()">submit</button>
+  
+   <a  href="image.html">
+    <button onclick="captureImage()" >image identification
+    </a >
+      </button>
+        
+
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let form=document.getElementById("form");
+   
+
+  
+
+
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    function draw(e) {
+      if (!isDrawing) return;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'black';
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseout', () => isDrawing = false);
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Clear the signature container when clearing the canvas
+      const signatureContainer = document.getElementById('signature-container');
+      signatureContainer.innerHTML = '';
+    }
+
+    function saveCanvas() {
+      const dataURI = canvas.toDataURL();
+      const signatureImage = new Image();
+      signatureImage.src = dataURI;
+      const signatureContainer = document.getElementById('signature-container');
+      //  signatureContainer.appendChild(signatureImage);
+      console.log(signatureContainer);
+      
+    }
+    function submit(){
+      let firstname=document.getElementById("first").value;
+      console.log(firstname);
+     let lastname=document.getElementById("last").value;
+     console.log(lastname);
+     let dob=document.getElementById("date").value;
+     console.log(dob);
+    
+      let add=document.getElementById("add").value;
+      console.log(add);
+    
+      
+      
+      let output =[
+         "Firstname: " + firstname + "<br>" +
+               "Lastname: " + lastname + "<br>" +
+               "Date of birth: " + dob + "<br>" +
+               "Address: " + add,
+    ]
+    let outputString = "";
+  output.forEach(function(line) {
+    outputString += line + "<br>";
+  });
+
+ console.log(outputString);
+  }      
+  
+  </script>
+  <!-- <div align="left">
+   <b> Registerd users</b>
+    <p id="demo"></p>
+  </div> -->
+</body>
+
+
+</html>
+
+
